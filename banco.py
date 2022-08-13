@@ -2,7 +2,7 @@ from pessoa import Pessoa
 from conta import Conta
 from datetime import datetime
 from database.data_base import Database
-from senha import senha
+from database.senha import senha
 
 
 class Banco:
