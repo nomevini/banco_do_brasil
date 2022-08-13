@@ -48,8 +48,10 @@ class Banco:
                 account = self._db.search_account(id_user)
                 if account:
                     id_account, senha, numeroConta, saldo = account[0][0], account[0][1], account[0][2], account[0][3]
-                    account = Conta(id_account, user, senha, numeroConta)
+                    account = Conta(id_account, user, senha, numeroConta, saldo)
                     return account
+                else:
+                    return False
             else:
                 return False
         except:
@@ -74,8 +76,10 @@ class Banco:
                 account.saldo -= valor
                 self._db.update_balance(account.titular.idUsuario, account.saldo)
                 if not transferencia:
-                    # esse processo será modificado
-                    account.historico.append((str(datetime.today().date()), f'Saque R${valor}'))
+                    data = str(datetime.today().date())
+                    operacao = f'Saque R${valor}'
+                    idConta = account.idConta
+                    self._db.update_historic(data, operacao, idConta)
                 return True
             else:
                 return False
@@ -84,11 +88,15 @@ class Banco:
 
     def depositar(self, valor, cpf, transferencia=False):
         try:
+            account = self.buscar_conta(cpf)
             valor = float(valor)
             if valor > 0:
-                self._contas[cpf].saldo += valor
+                account.saldo += valor
+                self._db.update_balance(account.titular.idUsuario, account.saldo)
                 if not transferencia:
-                    self._contas[cpf].historico.append((str(datetime.today().date()), f'Deposito R${valor}'))
+                    pass
+                    # o modo de adicionar no historico deverar ser modificado
+                    # self._contas[cpf].historico.append((str(datetime.today().date()), f'Deposito R${valor}'))
             else:
                 raise ValueError
             return True
@@ -97,12 +105,15 @@ class Banco:
 
     def transferir(self, valor, cpf_remetente, cpf_destino):
         try:
+            conta_remetente = self.buscar_conta(cpf_remetente)
+            conta_destino = self.buscar_conta(cpf_destino)
             valor = float(valor)
-            if self.contas[cpf_remetente].saldo >= valor:
-                if cpf_destino in self._contas:
+            if conta_remetente.saldo >= valor:
+                if conta_destino:
                     self.sacar(valor, cpf_remetente, True)
                     self.depositar(valor, cpf_destino, True)
                     # escrevendo no historico do remetente a transferencia
+                    '''
                     self._contas[cpf_remetente].historico.append((str(datetime.today().date()),
                                                                   f'Transferência para '
                                                                   f'{self._contas[cpf_destino].titular.nome} - '
@@ -112,6 +123,7 @@ class Banco:
                                                                   f'Transferência recebida de '
                                                                   f'{self._contas[cpf_remetente].titular.nome} - '
                                                                   f'R${valor}'))
+                    '''
                     return True
                 else:
                     return False

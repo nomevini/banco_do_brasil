@@ -2,12 +2,12 @@ class Conta:
 
     __slots__ = ['_idConta', '_titular', '_senha', '_saldo', '_numero', '_historico']
 
-    def __init__(self, idConta, titular, senha, numero):
+    def __init__(self, idConta, titular, senha, numero, saldo=0):
         self._idConta = idConta
         self._titular = titular
         self._senha = senha
         self._numero = numero
-        self._saldo = 0
+        self._saldo = saldo
         self._historico = []
 
     @property

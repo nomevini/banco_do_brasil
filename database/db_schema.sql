@@ -52,8 +52,8 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `banco_do_brasil`.`Historico` (
   `idHistorico` INT NOT NULL AUTO_INCREMENT,
-  `data` VARCHAR(20) NULL,
-  `operacao` VARCHAR(45) NULL,
+  `data` VARCHAR(45) NULL,
+  `operacao` VARCHAR(100) NULL,
   `Conta_idConta` INT NOT NULL,
   PRIMARY KEY (`idHistorico`),
   INDEX `fk_Historico_Conta1_idx` (`Conta_idConta` ASC) VISIBLE)

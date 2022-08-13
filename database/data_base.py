@@ -46,6 +46,11 @@ class Database:
         self.cursor.execute(sql)
         self.conexao.commit()
 
+    def update_historic(self, data, operacao, idConta):
+        sql = f'INSERT INTO Historico (data, operacao, Conta_idConta) VALUES ({data}, {operacao}, {idConta})'
+        self.cursor.execute(sql)
+        self.conexao.commit()
+
     def delete_line_users_table(self):
         self.cursor.execute('DELETE FROM Usuario')
 

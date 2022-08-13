@@ -107,6 +107,7 @@ class Telas:
             QtWidgets.QMessageBox.information(None, 'Acesso Negado', 'Não foi possível fazer login')
 
     def tela_dashboard(self):
+        self._conta_ativa = self.banco.buscar_conta(self._conta_ativa.titular.cpf)
         self.ui_dashboard.setupUi(self.MainWindow)
         self.ui_dashboard.label_saldo.setText(f'Saldo R$ {round(self.conta_ativa.saldo, 2)}')
         self.ui_dashboard.label_nome_usuario.setText(f'{self.conta_ativa.titular.nome}')
@@ -169,7 +170,7 @@ class Telas:
         if destinatario != self.conta_ativa.titular.cpf:
             if self.banco.transferir(valor, self.conta_ativa.titular.cpf, destinatario):
                 # tranferencia efetuada
-                QtWidgets.QMessageBox.information(None, 'Operação realizada', f'Transferencia de R${valor} realizada para {self.banco.contas[destinatario].titular.nome}')
+                QtWidgets.QMessageBox.information(None, 'Operação realizada', f'Transferencia de R${valor} realizada para {self.banco.buscar_conta(destinatario).titular.nome}')
                 self.tela_dashboard()
             else:
                 QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar a transferência!')
