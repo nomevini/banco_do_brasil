@@ -2,15 +2,18 @@ from pessoa import Pessoa
 from conta import Conta
 from datetime import datetime
 from database.data_base import Database
+from database.senha import senha
+
 
 class Banco:
 
-    __slots__ = ['_db']
+    __slots__ = ['_db', '_senha']
     _qtde_contas = 0
     _numero_conta = 1000
 
     def __init__(self):
-        self._db = Database('localhost', 'root', 'Relatividade891!', 'banco_do_brasil')
+        self._senha = senha()
+        self._db = Database('localhost', 'root', f'{self._senha}', 'banco_do_brasil')
 
     def criar_conta(self, nome: str, cpf: str, data_nascimento: str, senha: str):
         # criar pessoa
