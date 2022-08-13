@@ -1,8 +1,20 @@
 class Pessoa:
-    def __init__(self, nome, cpf, data_nascimento):
+
+    __slots__ = ['_idUsuario', '_nome', '_cpf', '_data_nascimento']
+
+    def __init__(self, idUsuario, nome, cpf, data_nascimento):
+        self._idUsuario = idUsuario
         self._nome = nome
         self._cpf = cpf
         self._data_nascimento = data_nascimento
+
+    @property
+    def idUsuario(self):
+        return self._idUsuario
+
+    @idUsuario.setter
+    def idUsuario(self, id):
+        self._idUsuario = id
 
     @property
     def nome(self):

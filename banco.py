@@ -1,39 +1,55 @@
 from pessoa import Pessoa
 from conta import Conta
 from datetime import datetime
+from database.data_base import Database
 
 class Banco:
 
-    __slots__ = ['_contas']
+    __slots__ = ['_db']
     _qtde_contas = 0
     _numero_conta = 1000
 
     def __init__(self):
-        self._contas = {}
-
-    @property
-    def contas(self):
-        return self._contas
+        self._db = Database('localhost', 'root', 'Relatividade891!', 'banco_do_brasil')
 
     def criar_conta(self, nome: str, cpf: str, data_nascimento: str, senha: str):
         # criar pessoa
+        # query para verificar se existe aquela conta no banco
         try:
-            if cpf not in self._contas:
-                pessoa = Pessoa(nome, cpf, data_nascimento)
-                conta = Conta(pessoa, senha, Banco._numero_conta)
-                Banco._qtde_contas += 1
-                self._contas[cpf] = conta
-                Banco._numero_conta += 1
-                return True
+            user = self._db.search_user(cpf)
+            if not user:
+                # cadastrar conta e o usuario
+                self._db.insert_users(nome, cpf, data_nascimento)
+                # buscar o idUsuario da pessoa
+                id_user = self._db.id_user(cpf)
+                if id_user:
+                    # criar a conta dessa pessoa e associar a ela
+                    self._db.insert_account(id_user[0][0], self._numero_conta, senha)
+                    Banco._numero_conta += 1
+                    return True
+                else:
+                    print('Sai aqui')
+                    return False
             else:
+                # usuario já cadastrado
                 return False
         except:
             return False
 
     def buscar_conta(self, cpf):
-        if cpf in self._contas:
-            return self._contas[cpf]
-        else:
+        try:
+            user = self._db.search_user(cpf)
+            if user:
+                id_user, nome, cpf, data_nascimento = user[0][0], user[0][1], user[0][2], user[0][3]
+                user = Pessoa(id_user, nome, cpf, data_nascimento)
+                account = self._db.search_account(id_user)
+                if account:
+                    id_account, senha, numeroConta, saldo = account[0][0], account[0][1], account[0][2], account[0][3]
+                    account = Conta(id_account, user, senha, numeroConta)
+                    return account
+            else:
+                return False
+        except:
             return False
 
     def login(self, cpf, senha):
@@ -47,13 +63,16 @@ class Banco:
 
     def sacar(self, valor, cpf, transferencia=False):
         try:
+            account = self.buscar_conta(cpf)
             valor = float(valor)
             if valor <= 0:
                 return False
-            if valor <= self._contas[cpf].saldo:
-                self._contas[cpf].saldo -= valor
+            if valor <= account.saldo:
+                account.saldo -= valor
+                self._db.update_balance(account.titular.idUsuario, account.saldo)
                 if not transferencia:
-                    self._contas[cpf].historico.append((str(datetime.today().date()), f'Saque R${valor}'))
+                    # esse processo será modificado
+                    account.historico.append((str(datetime.today().date()), f'Saque R${valor}'))
                 return True
             else:
                 return False

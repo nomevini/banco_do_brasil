@@ -1,8 +1,9 @@
 class Conta:
 
-    __slots__ = ['_titular', '_senha', '_saldo', '_numero', '_historico']
+    __slots__ = ['_idConta', '_titular', '_senha', '_saldo', '_numero', '_historico']
 
-    def __init__(self, titular, senha, numero):
+    def __init__(self, idConta, titular, senha, numero):
+        self._idConta = idConta
         self._titular = titular
         self._senha = senha
         self._numero = numero
@@ -10,12 +11,20 @@ class Conta:
         self._historico = []
 
     @property
+    def idConta(self):
+        return self._idConta
+
+    @idConta.setter
+    def idConta(self, id):
+        self._idConta = id
+
+    @property
     def titular(self):
         return self._titular
 
     @titular.setter
     def titular(self, titular):
-        self.titular = titular
+        self._titular = titular
 
     @property
     def senha(self):
