@@ -20,7 +20,6 @@ class Database:
             sql = f"INSERT INTO Conta (senha, numeroConta, saldo, Pessoa_idUsuario) VALUES ({senha}, {numeroConta}, {0.00}, {id_user})"
             self.cursor.execute(sql)
             self.conexao.commit()
-            print('cheguei')
             return True
         except:
             return False
@@ -46,10 +45,15 @@ class Database:
         self.cursor.execute(sql)
         self.conexao.commit()
 
-    def update_historic(self, data, operacao, idConta):
-        sql = f'INSERT INTO Historico (data, operacao, Conta_idConta) VALUES ({data}, {operacao}, {idConta})'
+    def update_historico(self, data, operacao, idConta):
+        sql = f"INSERT INTO Historico (data, operacao, Conta_idConta) VALUES ('{data}', '{operacao}', {idConta})"
         self.cursor.execute(sql)
         self.conexao.commit()
+
+    def load_user_historico(self, Conta_idConta):
+        sql = f"SELECT * FROM Historico WHERE Conta_idConta={Conta_idConta}"
+        self.cursor.execute(sql)
+        return list(self.cursor)
 
     def delete_line_users_table(self):
         self.cursor.execute('DELETE FROM Usuario')

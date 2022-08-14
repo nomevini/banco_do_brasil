@@ -45,10 +45,14 @@ class Banco:
             if user:
                 id_user, nome, cpf, data_nascimento = user[0][0], user[0][1], user[0][2], user[0][3]
                 user = Pessoa(id_user, nome, cpf, data_nascimento)
+                # buscar conta
                 account = self._db.search_account(id_user)
                 if account:
                     id_account, senha, numeroConta, saldo = account[0][0], account[0][1], account[0][2], account[0][3]
-                    account = Conta(id_account, user, senha, numeroConta, saldo)
+
+                    # buscar historico da conta
+                    historico = self._db.load_user_historico(id_account)
+                    account = Conta(id_account, user, senha, numeroConta, saldo, historico)
                     return account
                 else:
                     return False
@@ -76,10 +80,8 @@ class Banco:
                 account.saldo -= valor
                 self._db.update_balance(account.titular.idUsuario, account.saldo)
                 if not transferencia:
-                    data = str(datetime.today().date())
-                    operacao = f'Saque R${valor}'
-                    idConta = account.idConta
-                    self._db.update_historic(data, operacao, idConta)
+                    data = datetime.today().date()
+                    self._db.update_historico(f'{data}', f'Saque R${valor}', account.idConta)
                 return True
             else:
                 return False
@@ -94,9 +96,8 @@ class Banco:
                 account.saldo += valor
                 self._db.update_balance(account.titular.idUsuario, account.saldo)
                 if not transferencia:
-                    pass
-                    # o modo de adicionar no historico deverar ser modificado
-                    # self._contas[cpf].historico.append((str(datetime.today().date()), f'Deposito R${valor}'))
+                    data = datetime.today().date()
+                    self._db.update_historico(f'{data}', f'Deposito R${valor}', account.idConta)
             else:
                 raise ValueError
             return True
@@ -112,18 +113,14 @@ class Banco:
                 if conta_destino:
                     self.sacar(valor, cpf_remetente, True)
                     self.depositar(valor, cpf_destino, True)
+                    data = datetime.today().date()
+
                     # escrevendo no historico do remetente a transferencia
-                    '''
-                    self._contas[cpf_remetente].historico.append((str(datetime.today().date()),
-                                                                  f'Transferência para '
-                                                                  f'{self._contas[cpf_destino].titular.nome} - '
-                                                                  f'R${valor}'))
-                    # escrevendo no historico do destinatario a transferencia
-                    self._contas[cpf_destino].historico.append((str(datetime.today().date()),
-                                                                  f'Transferência recebida de '
-                                                                  f'{self._contas[cpf_remetente].titular.nome} - '
-                                                                  f'R${valor}'))
-                    '''
+                    self._db.update_historico(f'{data}', f'Transferencia de R${valor} para {conta_destino.titular.nome}',
+                                              conta_remetente.idConta)
+                    self._db.update_historico(f'{data}', f'Transferencia de R${valor} recebida de {conta_remetente.titular.nome}',
+                                              conta_destino.idConta)
+
                     return True
                 else:
                     return False

@@ -70,8 +70,8 @@ class Telas:
         senha = self.ui_criar_conta.lineEdit_senha.text()
         data_nascimento = self.ui_criar_conta.dateEdit.text()
         try:
-            int(cpf)
             if nome != '' and cpf != '' and senha != '':
+                int(cpf)
                 if self.banco.criar_conta(nome, cpf, data_nascimento, senha):
                     # mensagem de conta criada
                     if len(cpf) == 11:
@@ -85,7 +85,7 @@ class Telas:
             else:
                 QtWidgets.QMessageBox.information(None, 'ERROR', f'Nenhum campo pode ficar em branco!')
         except:
-            QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF não pode conter letras')
+            QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF não pode conter letras ou caracteres especiais')
 
     # login
     def tela_login(self):
@@ -116,9 +116,9 @@ class Telas:
         # definir a quantidade de linhas necessarias
         self.ui_dashboard.tableWidget.setRowCount(len(self.conta_ativa.historico))
 
-        for index, tupla_dados in enumerate(self.conta_ativa.historico):
-            self.ui_dashboard.tableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(tupla_dados[0]))
-            self.ui_dashboard.tableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(tupla_dados[1]))
+        for index, log in enumerate(self._conta_ativa.historico):
+            self.ui_dashboard.tableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(log[1]))
+            self.ui_dashboard.tableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(log[2]))
 
         # voltar
         self.ui_dashboard.pushButton_sair.clicked.connect(self.main)
