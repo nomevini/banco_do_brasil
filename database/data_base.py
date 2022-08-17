@@ -16,7 +16,6 @@ class Database:
     def insert_account(self, id_user, numeroConta, senha):
         try:
             # criar conta
-            values = (senha, numeroConta, 0.00, id_user)
             sql = f"INSERT INTO Conta (senha, numeroConta, saldo, Pessoa_idUsuario) VALUES (MD5({senha}), " \
                   f"{numeroConta}, {0.00}, {id_user})"
             self.cursor.execute(sql)
