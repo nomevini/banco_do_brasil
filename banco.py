@@ -3,6 +3,7 @@ from conta import Conta
 from datetime import datetime
 from database.data_base import Database
 from database.senha import senha
+from hash.hash import hash
 
 
 class Banco:
@@ -63,9 +64,10 @@ class Banco:
 
     def login(self, cpf, senha):
         conta = self.buscar_conta(cpf)
+        senha_hash = hash(senha)
         if conta:
             # verificar se a senha está correta
-            if senha == conta.senha:
+            if senha_hash == conta.senha:
                 return conta
         else:
             return False
