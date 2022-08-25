@@ -1,15 +1,16 @@
 import sys
 from PyQt5 import QtWidgets
-from tela_main import Ui_main
-from pages.criar_conta.tela_criar_conta import Ui_criar_conta
-from pages.login.tela_login import Ui_login
-from pages.dashboard.tela_dashboard import Ui_dashboard
-from pages.sacar.tela_sacar import Ui_sacar
-from pages.depositar.tela_depositar import Ui_depositar
-from pages.tranferir.tela_transferir import Ui_tranferir
-from banco import Banco
+from client.pages.main.tela_main import Ui_main
+from client.pages.criar_conta.tela_criar_conta import Ui_criar_conta
+from client.pages.login.tela_login import Ui_login
+from client.pages.dashboard.tela_dashboard import Ui_dashboard
+from client.pages.sacar.tela_sacar import Ui_sacar
+from client.pages.depositar.tela_depositar import Ui_depositar
+from client.pages.tranferir.tela_transferir import Ui_tranferir
+from server.banco import Banco
 
 # tratamentos necessários ->  o campo cpf só pode conter números
+
 
 class Telas:
     def __init__(self):
@@ -64,30 +65,7 @@ class Telas:
         # botao criar conta
         self.ui_criar_conta.pushButton_criar_conta.clicked.connect(self.criar_conta)
 
-    def criar_conta(self):
-        nome = self.ui_criar_conta.lineEdit_nome.text()
-        cpf = self.ui_criar_conta.lineEdit_cpf.text()
-        senha = self.ui_criar_conta.lineEdit_senha.text()
-        data_nascimento = self.ui_criar_conta.dateEdit.text()
-        try:
-            if nome != '' and cpf != '' and senha != '':
-                int(cpf)
-                if self.banco.criar_conta(nome, cpf, data_nascimento, senha):
-                    # mensagem de conta criada
-                    if len(cpf) == 11:
-                        QtWidgets.QMessageBox.information(None, 'Conta criada', f'{self.banco.buscar_conta(cpf)}')
-                        self.main()
-                    else:
-                        QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF deve conter 11 números')
-                else:
-                    # não foi possível criar
-                    QtWidgets.QMessageBox.information(None, 'ERROR', f'Não foi possível criar a conta')
-            else:
-                QtWidgets.QMessageBox.information(None, 'ERROR', f'Nenhum campo pode ficar em branco!')
-        except:
-            QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF não pode conter letras ou caracteres especiais')
-
-    # login
+    # tela_login
     def tela_login(self):
         self.ui_login.setupUi(self.MainWindow)
         # botao voltar
@@ -95,17 +73,7 @@ class Telas:
         # botao entrar
         self.ui_login.pushButton_entrar.clicked.connect(self.fazer_login)
 
-    def fazer_login(self):
-        cpf = self.ui_login.lineEdit_cpf.text()
-        senha = self.ui_login.lineEdit_senha.text()
-        self._conta_ativa = self.banco.login(cpf, senha)
-        if self.conta_ativa:
-            # login permitido
-            self.tela_dashboard()
-        else:
-            # acesso negado
-            QtWidgets.QMessageBox.information(None, 'Acesso Negado', 'Não foi possível fazer login')
-
+    # tela_dashboard
     def tela_dashboard(self):
         self._conta_ativa = self.banco.buscar_conta(self._conta_ativa.titular.cpf)
         self.ui_dashboard.setupUi(self.MainWindow)
@@ -132,49 +100,102 @@ class Telas:
         # tranferir
         self.ui_dashboard.pushButton_transferir.clicked.connect(self.tela_transferir)
 
+    # tela_depositar
     def tela_depositar(self):
         self.ui_depositar.setupUi(self.MainWindow)
         self.ui_depositar.pushButton_voltar.clicked.connect(self.tela_dashboard)
         self.ui_depositar.pushButton_depositar.clicked.connect(self.depositar)
 
-    def depositar(self):
-        valor = self.ui_depositar.lineEdit_valor.text()
-        if self.banco.depositar(valor, self.conta_ativa.titular.cpf):
-            QtWidgets.QMessageBox.information(None, 'Operação realizada', 'Deposito realizado com sucesso')
-            self.tela_dashboard()
-        else:
-            QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar o deposito\n'
-                                                             'Valor invalido!')
-
-    def tela_sacar(self):
-        self.ui_sacar.setupUi(self.MainWindow)
-        self.ui_sacar.pushButton_voltar.clicked.connect(self.tela_dashboard)
-        self.ui_sacar.pushButton_sacar.clicked.connect(self.sacar)
-
-    def sacar(self):
-        valor = self.ui_sacar.lineEdit_valor.text()
-        if self.banco.sacar(valor, self.conta_ativa.titular.cpf):
-            QtWidgets.QMessageBox.information(None, 'Operação realizada', 'Saque realizado com sucesso')
-            self.tela_dashboard()
-        else:
-            QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar o saque')
-
+    # tela_transferir
     def tela_transferir(self):
         self.ui_tranferir.setupUi(self.MainWindow)
         self.ui_tranferir.pushButton_voltar.clicked.connect(self.tela_dashboard)
         self.ui_tranferir.pushButton_transferir.clicked.connect(self.transferir)
 
+    # tela_sacar
+    def tela_sacar(self):
+        self.ui_sacar.setupUi(self.MainWindow)
+        self.ui_sacar.pushButton_voltar.clicked.connect(self.tela_dashboard)
+        self.ui_sacar.pushButton_sacar.clicked.connect(self.sacar)
+
+    # Criar conta
+    def criar_conta(self):
+        nome = self.ui_criar_conta.lineEdit_nome.text()
+        cpf = self.ui_criar_conta.lineEdit_cpf.text()
+        senha = self.ui_criar_conta.lineEdit_senha.text()
+        data_nascimento = self.ui_criar_conta.dateEdit.text()
+        try:
+            if nome != '' and cpf != '' and senha != '':
+                int(cpf)
+                if self.banco.criar_conta(nome, cpf, data_nascimento, senha):
+                    # mensagem de conta criada
+                    if len(cpf) == 11:
+                        QtWidgets.QMessageBox.information(None, 'Conta criada', f'{self.banco.buscar_conta(cpf)}')
+                        self.main()
+                    else:
+                        QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF deve conter 11 números')
+                else:
+                    # não foi possível criar
+                    QtWidgets.QMessageBox.information(None, 'ERROR', f'Não foi possível criar a conta')
+            else:
+                QtWidgets.QMessageBox.information(None, 'ERROR', f'Nenhum campo pode ficar em branco!')
+        except:
+            QtWidgets.QMessageBox.information(None, 'ERROR', f'O campo CPF não pode conter letras ou caracteres especiais')
+
+    # Fazer login
+    # Fazer login receberá por parametro o email e a senha digitados na parte do cliente
+    def fazer_login(self):
+        cpf = self.ui_login.lineEdit_cpf.text()
+        senha = self.ui_login.lineEdit_senha.text()
+        self._conta_ativa = self.banco.login(cpf, senha)
+        if self.conta_ativa:
+            # login permitido
+            self.tela_dashboard()
+        else:
+            # acesso negado
+            QtWidgets.QMessageBox.information(None, 'Acesso Negado', 'Não foi possível fazer login')
+
+    # Depositar
+    # Depositar receberá do cliente o valor e o cpf para deposito
+    def depositar(self):
+        valor = self.ui_depositar.lineEdit_valor.text()
+        if self.banco.depositar(valor, self.conta_ativa.titular.cpf):
+            # retornar para o cliente a informação que foi efetuado (Um True e os parametros da QtWidgets)
+            QtWidgets.QMessageBox.information(None, 'Operação realizada', 'Deposito realizado com sucesso')
+            self.tela_dashboard()
+        else:
+            # retornar para o cliente a informação se foi o não efetuado (False e os parametros da QtWidgets)
+            QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar o deposito\n'
+                                                             'Valor invalido!')
+
+    # Sacar
+    # Sacar receberá o valor e o cpf do titular
+    def sacar(self):
+        valor = self.ui_sacar.lineEdit_valor.text()
+        if self.banco.sacar(valor, self.conta_ativa.titular.cpf):
+            # retornar para o cliente a informação que foi efetuado (Um True e os parametros da QtWidgets)
+            QtWidgets.QMessageBox.information(None, 'Operação realizada', 'Saque realizado com sucesso')
+            self.tela_dashboard()
+        else:
+            # retornar para o cliente a informação que não foi efetuado(Um True e os parametros da QtWidgets)
+            QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar o saque')
+
+    # Transferir
+    # tranferir receberá o valor da transferencia, o remetente e o destinatario
     def transferir(self):
         valor = self.ui_tranferir.lineEdit_valor.text()
         destinatario = self.ui_tranferir.lineEdit.text()
         if destinatario != self.conta_ativa.titular.cpf:
             if self.banco.transferir(valor, self.conta_ativa.titular.cpf, destinatario):
                 # tranferencia efetuada
+                # retornar para o cliente a informação que foi efetuado (Um True e os parametros da QtWidgets)
                 QtWidgets.QMessageBox.information(None, 'Operação realizada', f'Transferencia de R${valor} realizada para {self.banco.buscar_conta(destinatario).titular.nome}')
                 self.tela_dashboard()
             else:
+                # retornar para o cliente a informação que não foi efetuado (Um True e os parametros da QtWidgets)
                 QtWidgets.QMessageBox.information(None, 'ERROR', 'Não foi possível realizar a transferência!')
         else:
+            # retornar para o cliente a informação que não foi efetuado (Um True e os parametros da QtWidgets)
             QtWidgets.QMessageBox.information(None, 'ERROR', 'Não é possível transferir para a mesma conta!')
 
 

@@ -1,9 +1,9 @@
 from pessoa import Pessoa
 from conta import Conta
 from datetime import datetime
-from database.data_base import Database
-from database.senha import senha
-from hash.hash import hash
+from server.database.data_base import Database
+from server.database.senha import senha
+from server.hash.hash import hash
 
 
 class Banco:

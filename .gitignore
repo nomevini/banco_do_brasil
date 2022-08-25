@@ -1,4 +1,4 @@
 __pycache__
 .idea
-database/teste.py
-/database/senha.py
+server/database/teste.py
+/server/database/senha.py

@@ -8,7 +8,7 @@
   <component name="PyNamespacePackagesService">
     <option name="namespacePackageFolders">
       <list>
-        <option value="$MODULE_DIR$/pages" />
+        <option value="$MODULE_DIR$/client/pages" />
       </list>
     </option>
   </component>
