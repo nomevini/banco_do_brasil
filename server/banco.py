@@ -1,5 +1,5 @@
-from pessoa import Pessoa
-from conta import Conta
+from server.pessoa import Pessoa
+from server.conta import Conta
 from datetime import datetime
 from server.database.data_base import Database
 from server.database.senha import senha
@@ -16,6 +16,27 @@ class Banco:
         self._senha = senha()
         self._db = Database('localhost', 'root', f'{self._senha}', 'banco_do_brasil')
 
+    def nome_titular(self, *args):
+        cpf = args[0]
+        conta = self.buscar_conta(cpf)
+        return f'{conta.titular.nome}'
+
+    def saldo_titular(self, *args):
+        cpf = args[0]
+        conta = self.buscar_conta(cpf)
+        return f'{conta.saldo}'
+
+    def historico_titular(self, *args):
+        string = ''
+        cpf = args[0]
+        conta = self.buscar_conta(cpf)
+        for operacao in conta.historico:
+            string += f'{operacao[1]}*{operacao[2]}\n'
+        if string:
+            return string
+        else:
+            return False
+
     def criar_conta(self, nome: str, cpf: str, data_nascimento: str, senha: str):
         # criar pessoa
         # query para verificar se existe aquela conta no banco
@@ -30,7 +51,7 @@ class Banco:
                     # criar a conta dessa pessoa e associar a ela
                     self._db.insert_account(id_user[0][0], self._numero_conta, senha)
                     Banco._numero_conta += 1
-                    return True
+                    return f'Titular - {nome}\nNúmero da conta - {self._numero_conta}\n'
                 else:
                     print('Sai aqui')
                     return False
@@ -62,13 +83,15 @@ class Banco:
         except:
             return False
 
-    def login(self, cpf, senha):
+    def login(self, *args):
+        print(args)
+        cpf, senha = args
         conta = self.buscar_conta(cpf)
         senha_hash = hash(senha)
         if conta:
             # verificar se a senha está correta
             if senha_hash == conta.senha:
-                return conta
+                return f'{cpf}'
         else:
             return False
 
@@ -101,7 +124,7 @@ class Banco:
                     data = datetime.today().date()
                     self._db.update_historico(f'{data}', f'Deposito R${valor}', account.idConta)
             else:
-                raise ValueError
+                return False
             return True
         except ValueError:
             return False
@@ -111,19 +134,19 @@ class Banco:
             conta_remetente = self.buscar_conta(cpf_remetente)
             conta_destino = self.buscar_conta(cpf_destino)
             valor = float(valor)
-            if conta_remetente.saldo >= valor:
-                if conta_destino:
-                    self.sacar(valor, cpf_remetente, True)
-                    self.depositar(valor, cpf_destino, True)
-                    data = datetime.today().date()
+            if valor > 0:
+                if conta_remetente.saldo >= valor:
+                    if conta_destino:
+                        self.sacar(valor, cpf_remetente, True)
+                        self.depositar(valor, cpf_destino, True)
+                        data = datetime.today().date()
 
-                    # escrevendo no historico do remetente a transferencia
-                    self._db.update_historico(f'{data}', f'Transferencia de R${valor} para {conta_destino.titular.nome}',
-                                              conta_remetente.idConta)
-                    self._db.update_historico(f'{data}', f'Transferencia de R${valor} recebida de {conta_remetente.titular.nome}',
-                                              conta_destino.idConta)
-
-                    return True
+                        # escrevendo no historico do remetente a transferencia
+                        self._db.update_historico(f'{data}', f'Transferencia de R${valor} para '
+                                                             f'{conta_destino.titular.nome}', conta_remetente.idConta)
+                        self._db.update_historico(f'{data}', f'Transferencia de R${valor} recebida de '
+                                                             f'{conta_remetente.titular.nome}', conta_destino.idConta)
+                        return True
                 else:
                     return False
             else:

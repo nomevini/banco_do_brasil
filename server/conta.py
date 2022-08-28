@@ -50,5 +50,10 @@ class Conta:
     def historico(self, historico):
         self._historico = historico
 
+    def formatar_historico_string(self):
+        string = ''
+        for operacao in self.historico:
+            string += f'{operacao[0]}*{operacao[1]}*{operacao[2]}\n'
+
     def __str__(self):
         return f'Titular - {self._titular.nome}\nNúmero da conta - {self._numero}\n'
