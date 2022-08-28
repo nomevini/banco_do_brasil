@@ -1,5 +1,5 @@
 import socket
-from server.banco import Banco
+from banco import Banco
 
 
 class Server:
@@ -34,5 +34,5 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server('localhost', 8001)
+    server = Server('localhost', 8000)
     server.start()

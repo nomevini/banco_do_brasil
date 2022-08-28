@@ -1,9 +1,9 @@
-from server.pessoa import Pessoa
-from server.conta import Conta
+from pessoa import Pessoa
+from conta import Conta
 from datetime import datetime
-from server.database.data_base import Database
-from server.database.senha import senha
-from server.hash.hash import hash
+from database.data_base import Database
+from database.senha import senha
+from hash.hash import hash
 
 
 class Banco:
@@ -53,7 +53,6 @@ class Banco:
                     Banco._numero_conta += 1
                     return f'Titular - {nome}\nNúmero da conta - {self._numero_conta}\n'
                 else:
-                    print('Sai aqui')
                     return False
             else:
                 # usuario já cadastrado
@@ -84,7 +83,6 @@ class Banco:
             return False
 
     def login(self, *args):
-        print(args)
         cpf, senha = args
         conta = self.buscar_conta(cpf)
         senha_hash = hash(senha)

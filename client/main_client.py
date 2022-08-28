@@ -1,13 +1,13 @@
 import sys
 from PyQt5 import QtWidgets
-from client.pages.main.tela_main import Ui_main
-from client.pages.criar_conta.tela_criar_conta import Ui_criar_conta
-from client.pages.login.tela_login import Ui_login
-from client.pages.dashboard.tela_dashboard import Ui_dashboard
-from client.pages.sacar.tela_sacar import Ui_sacar
-from client.pages.depositar.tela_depositar import Ui_depositar
-from client.pages.tranferir.tela_transferir import Ui_tranferir
-from client.connection import connect_server
+from pages.main.tela_main import Ui_main
+from pages.criar_conta.tela_criar_conta import Ui_criar_conta
+from pages.login.tela_login import Ui_login
+from pages.dashboard.tela_dashboard import Ui_dashboard
+from pages.sacar.tela_sacar import Ui_sacar
+from pages.depositar.tela_depositar import Ui_depositar
+from pages.tranferir.tela_transferir import Ui_tranferir
+from connection import connect_server
 
 
 class Telas:
@@ -16,7 +16,7 @@ class Telas:
         self._cpf_conta_ativa = ''
         # criar conexão com o banco
         try:
-            self.client_socket = connect_server('localhost', 8001)
+            self.client_socket = connect_server('localhost', 8000)
         except ConnectionRefusedError:
             QtWidgets.QMessageBox.information(None, 'ERROR', f'Não foi possível conectar ao servidor.'
                                                              f'\nVerifique a conexão e tente novamente')
