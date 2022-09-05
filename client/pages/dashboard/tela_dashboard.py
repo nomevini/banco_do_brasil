@@ -52,6 +52,29 @@ class Ui_dashboard(object):
 "}")
         self.label_nome_usuario.setObjectName("label_nome_usuario")
         self.horizontalLayout.addWidget(self.label_nome_usuario)
+        spacerItem = QtWidgets.QSpacerItem(308, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.pushButton_atualizar = QtWidgets.QPushButton(self.frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_atualizar.sizePolicy().hasHeightForWidth())
+        self.pushButton_atualizar.setSizePolicy(sizePolicy)
+        self.pushButton_atualizar.setMaximumSize(QtCore.QSize(29, 30))
+        self.pushButton_atualizar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton_atualizar.setAutoFillBackground(False)
+        self.pushButton_atualizar.setStyleSheet("#pushButton_atualizar { \n"
+"    border: none;\n"
+"    background-color: #F4DE1E;\n"
+"    border-radius: 12px;\n"
+"}")
+        self.pushButton_atualizar.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("../../../../../../../Downloads/refresh-svgrepo-com (1).svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        self.pushButton_atualizar.setIcon(icon)
+        self.pushButton_atualizar.setIconSize(QtCore.QSize(16, 16))
+        self.pushButton_atualizar.setObjectName("pushButton_atualizar")
+        self.horizontalLayout.addWidget(self.pushButton_atualizar)
         self.label_saldo = QtWidgets.QLabel(self.frame)
         font = QtGui.QFont()
         font.setFamily("Roboto Medium")
@@ -74,8 +97,8 @@ class Ui_dashboard(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalFrame)
         self.horizontalLayout_2.setContentsMargins(1, 1, 1, -1)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
         self.verticalFrame = QtWidgets.QFrame(self.horizontalFrame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -86,8 +109,8 @@ class Ui_dashboard(object):
         self.verticalFrame.setObjectName("verticalFrame")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalFrame)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_4.addItem(spacerItem1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_4.addItem(spacerItem2)
         self.horizontalFrame_2 = QtWidgets.QFrame(self.verticalFrame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -109,12 +132,13 @@ class Ui_dashboard(object):
         font = QtGui.QFont()
         font.setFamily("Roboto Black")
         self.pushButton_depositar.setFont(font)
-        self.pushButton_depositar.setStyleSheet("#pushButton_entrar {\n"
+        self.pushButton_depositar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton_depositar.setStyleSheet("#pushButton_depositar {\n"
 "    border-radius: 20px;\n"
 "    background-color: rgb(244, 222, 30);\n"
 "    color: rgb(20, 34, 143)\n"
 "}")
-        self.pushButton_depositar.setObjectName("pushButton_entrar")
+        self.pushButton_depositar.setObjectName("pushButton_depositar")
         self.horizontalLayout_3.addWidget(self.pushButton_depositar)
         self.pushButton_sacar = QtWidgets.QPushButton(self.horizontalFrame_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -126,12 +150,13 @@ class Ui_dashboard(object):
         font = QtGui.QFont()
         font.setFamily("Roboto Black")
         self.pushButton_sacar.setFont(font)
-        self.pushButton_sacar.setStyleSheet("#pushButton_criar_conta {\n"
+        self.pushButton_sacar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton_sacar.setStyleSheet("#pushButton_sacar {\n"
 "    border-radius: 20px;\n"
 "    background-color: rgb(244, 222, 30);\n"
 "    color: rgb(20, 34, 143)\n"
 "}")
-        self.pushButton_sacar.setObjectName("pushButton_criar_conta")
+        self.pushButton_sacar.setObjectName("pushButton_sacar")
         self.horizontalLayout_3.addWidget(self.pushButton_sacar)
         self.pushButton_transferir = QtWidgets.QPushButton(self.horizontalFrame_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
@@ -143,6 +168,7 @@ class Ui_dashboard(object):
         font = QtGui.QFont()
         font.setFamily("Roboto Black")
         self.pushButton_transferir.setFont(font)
+        self.pushButton_transferir.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_transferir.setStyleSheet("#pushButton_transferir {\n"
 "    border-radius: 20px;\n"
 "    background-color: rgb(244, 222, 30);\n"
@@ -197,6 +223,7 @@ class Ui_dashboard(object):
         font = QtGui.QFont()
         font.setFamily("Roboto Black")
         self.pushButton_sair.setFont(font)
+        self.pushButton_sair.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_sair.setStyleSheet("#pushButton_sair {\n"
 "    border-radius: 20px;\n"
 "    background-color: rgb(244, 222, 30);\n"
@@ -206,8 +233,8 @@ class Ui_dashboard(object):
         self.horizontalLayout_4.addWidget(self.pushButton_sair)
         self.verticalLayout_4.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_2.addWidget(self.verticalFrame)
-        spacerItem2 = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem3)
         self.verticalLayout.addWidget(self.horizontalFrame)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)

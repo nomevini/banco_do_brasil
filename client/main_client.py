@@ -82,29 +82,14 @@ class Telas:
         # requisição para buscar as informações da conta ativa
         request = f'nome_titular*{self._cpf_conta_ativa}'
         nome = self.send_request(request)
-        request = f'saldo_titular*{self._cpf_conta_ativa}'
-        saldo = self.send_request(request)
 
-        # self._conta_ativa = self.banco.buscar_conta(self._conta_ativa.titular.cpf)
         self.ui_dashboard.setupUi(self.MainWindow)
-        self.ui_dashboard.label_saldo.setText(f'Saldo R$ {round(float(saldo), 2)}')
+        self.atualizar_dados()
         self.ui_dashboard.label_nome_usuario.setText(f'{nome}')
+        self.print_historico()
 
-        # carregar historico
-        request = f'historico_titular*{self._cpf_conta_ativa}'
-        if request != 'False':
-            request_return = self.send_request(request).split('\n')
-            historico = []
-            for x in request_return:
-                historico.append(list(x.split('*')))
-            historico.pop()
-
-            # definir a quantidade de linhas necessarias
-            self.ui_dashboard.tableWidget.setRowCount(len(historico))
-
-            for index, log in enumerate(historico):
-                self.ui_dashboard.tableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(log[0]))
-                self.ui_dashboard.tableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(log[1]))
+        # atualizar
+        self.ui_dashboard.pushButton_atualizar.clicked.connect(self.atualizar_dados)
 
         # voltar
         self.ui_dashboard.pushButton_sair.clicked.connect(self.main)
@@ -117,6 +102,30 @@ class Telas:
 
         # tranferir
         self.ui_dashboard.pushButton_transferir.clicked.connect(self.tela_transferir)
+
+    def print_historico(self):
+        # carregar historico
+        request = f'historico_titular*{self._cpf_conta_ativa}'
+        request_return = self.send_request(request).split('\n')
+        if request != 'False':
+            historico = []
+            for x in request_return:
+                historico.append(list(x.split('*')))
+            historico.pop()
+
+            # definir a quantidade de linhas necessarias
+            self.ui_dashboard.tableWidget.setRowCount(len(historico))
+
+            for index, log in enumerate(historico):
+                self.ui_dashboard.tableWidget.setItem(index, 0, QtWidgets.QTableWidgetItem(log[0]))
+                self.ui_dashboard.tableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(log[1]))
+
+    def atualizar_dados(self):
+        request = f'saldo_titular*{self._cpf_conta_ativa}'
+        saldo = self.send_request(request)
+        self.ui_dashboard.label_saldo.setText(f'Saldo R$ {round(float(saldo), 2)}')
+
+        self.print_historico()
 
     # tela_depositar
     def tela_depositar(self):
