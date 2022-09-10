@@ -69,7 +69,7 @@
        <number>20</number>
       </property>
       <item>
-       <widget class="QFrame" name="">
+       <widget class="QFrame" name="frame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
           <horstretch>0</horstretch>
@@ -100,6 +100,70 @@
            </property>
            <property name="text">
             <string>Bem vindo, Vinícius</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Maximum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>261</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_atualizar">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Roboto Black</family>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#pushButton_atualizar { 
+	border: none;
+	background-color: #F4DE1E;
+	border-radius: 12px;
+	color: rgb(20, 34, 143);
+}</string>
+           </property>
+           <property name="text">
+            <string>Atualizar</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../client/pages/dashboard/icons/icons8-refresh.svg</normaloff>../client/pages/dashboard/icons/icons8-refresh.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -214,7 +278,7 @@
                 <number>1</number>
                </property>
                <item>
-                <widget class="QPushButton" name="pushButton_entrar">
+                <widget class="QPushButton" name="pushButton_depositar">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -232,8 +296,11 @@
                    <family>Roboto Black</family>
                   </font>
                  </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
                  <property name="styleSheet">
-                  <string notr="true">#pushButton_entrar {
+                  <string notr="true">#pushButton_depositar {
 	border-radius: 20px;
 	background-color: rgb(244, 222, 30);
 	color: rgb(20, 34, 143)
@@ -245,7 +312,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_criar_conta">
+                <widget class="QPushButton" name="pushButton_sacar">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                    <horstretch>0</horstretch>
@@ -263,8 +330,11 @@
                    <family>Roboto Black</family>
                   </font>
                  </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
                  <property name="styleSheet">
-                  <string notr="true">#pushButton_criar_conta {
+                  <string notr="true">#pushButton_sacar {
 	border-radius: 20px;
 	background-color: rgb(244, 222, 30);
 	color: rgb(20, 34, 143)
@@ -293,6 +363,9 @@
                   <font>
                    <family>Roboto Black</family>
                   </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">#pushButton_transferir {
@@ -395,6 +468,9 @@
                  <font>
                   <family>Roboto Black</family>
                  </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">#pushButton_sair {

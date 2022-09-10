@@ -16,7 +16,7 @@ class Telas:
         self._cpf_conta_ativa = ''
         # criar conexão com o banco
         try:
-            self.client_socket = connect_server('localhost', 8000)
+            self.client_socket = connect_server('localhost', 8001)
         except ConnectionRefusedError:
             QtWidgets.QMessageBox.information(None, 'ERROR', f'Não foi possível conectar ao servidor.'
                                                              f'\nVerifique a conexão e tente novamente')

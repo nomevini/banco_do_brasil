@@ -4,17 +4,19 @@ from datetime import datetime
 from database.data_base import Database
 from database.senha import senha
 from hash.hash import hash
+import threading
 
 
 class Banco:
 
-    __slots__ = ['_db', '_senha']
+    __slots__ = ['_db', '_senha', '_sinc_thread']
     _qtde_contas = 0
     _numero_conta = 1000
 
     def __init__(self):
         self._senha = senha()
         self._db = Database('localhost', 'root', f'{self._senha}', 'banco_do_brasil')
+        self._sinc_thread = threading.Lock()
 
     def nome_titular(self, *args):
         cpf = args[0]
@@ -49,7 +51,9 @@ class Banco:
                 id_user = self._db.id_user(cpf)
                 if id_user:
                     # criar a conta dessa pessoa e associar a ela
+                    self._sinc_thread.acquire()
                     self._db.insert_account(id_user[0][0], self._numero_conta, senha)
+                    self._sinc_thread.release()
                     Banco._numero_conta += 1
                     return f'Titular - {nome}\nNúmero da conta - {self._numero_conta}\n'
                 else:
@@ -101,7 +105,9 @@ class Banco:
                 return False
             if valor <= account.saldo:
                 account.saldo -= valor
+                self._sinc_thread.acquire()
                 self._db.update_balance(account.titular.idUsuario, account.saldo)
+                self._sinc_thread.release()
                 if not transferencia:
                     data = datetime.today().date()
                     self._db.update_historico(f'{data}', f'Saque R${valor}', account.idConta)
@@ -117,7 +123,9 @@ class Banco:
             valor = float(valor)
             if valor > 0:
                 account.saldo += valor
+                self._sinc_thread.acquire()
                 self._db.update_balance(account.titular.idUsuario, account.saldo)
+                self._sinc_thread.release()
                 if not transferencia:
                     data = datetime.today().date()
                     self._db.update_historico(f'{data}', f'Deposito R${valor}', account.idConta)
@@ -140,10 +148,12 @@ class Banco:
                         data = datetime.today().date()
 
                         # escrevendo no historico do remetente a transferencia
+                        self._sinc_thread.acquire()
                         self._db.update_historico(f'{data}', f'Transferencia de R${valor} para '
                                                              f'{conta_destino.titular.nome}', conta_remetente.idConta)
                         self._db.update_historico(f'{data}', f'Transferencia de R${valor} recebida de '
                                                              f'{conta_remetente.titular.nome}', conta_destino.idConta)
+                        self._sinc_thread.release()
                         return True
                 else:
                     return False

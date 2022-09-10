@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_dashboard(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -52,7 +51,7 @@ class Ui_dashboard(object):
 "}")
         self.label_nome_usuario.setObjectName("label_nome_usuario")
         self.horizontalLayout.addWidget(self.label_nome_usuario)
-        spacerItem = QtWidgets.QSpacerItem(308, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(261, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.pushButton_atualizar = QtWidgets.QPushButton(self.frame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -60,17 +59,20 @@ class Ui_dashboard(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_atualizar.sizePolicy().hasHeightForWidth())
         self.pushButton_atualizar.setSizePolicy(sizePolicy)
-        self.pushButton_atualizar.setMaximumSize(QtCore.QSize(29, 30))
+        self.pushButton_atualizar.setMaximumSize(QtCore.QSize(80, 30))
+        font = QtGui.QFont()
+        font.setFamily("Roboto Black")
+        self.pushButton_atualizar.setFont(font)
         self.pushButton_atualizar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_atualizar.setAutoFillBackground(False)
         self.pushButton_atualizar.setStyleSheet("#pushButton_atualizar { \n"
 "    border: none;\n"
 "    background-color: #F4DE1E;\n"
 "    border-radius: 12px;\n"
+"    color: rgb(20, 34, 143);\n"
 "}")
-        self.pushButton_atualizar.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../../../../../../../Downloads/refresh-svgrepo-com (1).svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../client/pages/dashboard/icons/icons8-refresh.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_atualizar.setIcon(icon)
         self.pushButton_atualizar.setIconSize(QtCore.QSize(16, 16))
         self.pushButton_atualizar.setObjectName("pushButton_atualizar")
@@ -250,6 +252,7 @@ class Ui_dashboard(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_nome_usuario.setText(_translate("MainWindow", "Bem vindo, Vinícius"))
+        self.pushButton_atualizar.setText(_translate("MainWindow", "Atualizar"))
         self.label_saldo.setText(_translate("MainWindow", "Saldo R$ 10.000,00"))
         self.pushButton_depositar.setText(_translate("MainWindow", "Depositar"))
         self.pushButton_sacar.setText(_translate("MainWindow", "Sacar"))
