@@ -382,13 +382,19 @@
               </layout>
              </widget>
             </item>
-            <item alignment="Qt::AlignBottom">
+            <item>
              <widget class="QLabel" name="label_historico">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
               </property>
               <property name="font">
                <font>

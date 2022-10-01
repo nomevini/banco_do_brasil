@@ -9,14 +9,81 @@ from pages.depositar.tela_depositar import Ui_depositar
 from pages.tranferir.tela_transferir import Ui_tranferir
 from connection import connect_server
 
+"""
+    The screen class creates all screens so that the user can
+    interact and transit through it, sending and receiving requests
+    that will be printed on the user's screens.
+"""
+
 
 class Telas:
+    """
+    Attributes
+    ----------
+
+    MainWindow : QtWidgets.QMainWindow
+        Main screen used to add interface items.
+    _cpf_conta_ativa : str
+        CPF number of the active account in the application.
+    client_socket : socket.socket
+        Socket to send and receive server requests.
+    ui_main : Ui_main
+        Main application window.
+    ui_criar_conta : Ui_criar_conta
+        Account creation window.
+    ui_login : Ui_login
+        Window to log in to the application.
+    ui_dashboard : Ui_dashboard
+        Window with system functionalities.
+    self.ui_sacar : Ui_sacar
+        Window to withdraw money from the account.
+    self.ui_depositar : Ui_depositar()
+        Account deposit window.
+    ui_tranferir : Ui_tranferir
+        Window to make the transfer.
+
+    Methods
+    -------
+
+    send_request(self, request)
+        Send requests to the server.
+    exit()
+        end the program.
+    main():
+        starts the main program window.
+    tela_criar_conta()
+        launches the program's account creation window.
+    tela_login(self):
+        launches the program's login window.
+    tela_dashboard(self):
+        Starts the main window of the program's bank account.
+    print_historico(self):
+        Return an account history.
+    atualizar_dados(self):
+        Updates the data on the user's screen.
+    tela_depositar(self):
+        Launches the bank deposit screen.
+    tela_transferir(self):
+        Starts the bank transfer screen.
+    tela_sacar(self):
+        Starts the bank withdrawal screen.
+    criar_conta()
+        Runs the bank account creation process.
+    fazer_login(self):
+        Runs the bank login process.
+    depositar(self)
+        Executes the bank deposit process.
+    sacar(self)
+        runs the bank withdrawal process.
+    transferir(self)
+        runs the bank transfer process.
+    """
     def __init__(self):
         self.MainWindow = QtWidgets.QMainWindow()
         self._cpf_conta_ativa = ''
         # criar conexão com o banco
         try:
-            self.client_socket = connect_server('localhost', 8001)
+            self.client_socket = connect_server('localhost', 8000)
         except ConnectionRefusedError:
             QtWidgets.QMessageBox.information(None, 'ERROR', f'Não foi possível conectar ao servidor.'
                                                              f'\nVerifique a conexão e tente novamente')
@@ -47,15 +114,30 @@ class Telas:
         self.MainWindow.show()
 
     def send_request(self, request):
+        """
+        Send requests to the server and return the request
+        sent from the server.
+
+        parameters
+        ----------
+        request : str
+            Request to be sent.
+        """
         self.client_socket.send(request.encode())
         recv = self.client_socket.recv(1024)
         return recv.decode()
 
     def exit(self):
+        """
+        End the program.
+        """
         self.send_request('exit')
         sys.exit()
 
     def main(self):
+        """
+            starts the main program window.
+        """
         self.ui_main.setupUi(self.MainWindow)
         self.ui_main.pushButton_criar_conta.clicked.connect(self.tela_criar_conta)
         self.ui_main.pushButton_entrar.clicked.connect(self.tela_login)
@@ -63,6 +145,9 @@ class Telas:
 
     # criar conta
     def tela_criar_conta(self):
+        """
+            launches the program's account creation window.
+        """
         self.ui_criar_conta.setupUi(self.MainWindow)
         # botao voltar
         self.ui_criar_conta.pushButton_voltar.clicked.connect(self.main)
@@ -71,6 +156,9 @@ class Telas:
 
     # tela_login
     def tela_login(self):
+        """
+        launches the program's login window.
+        """
         self.ui_login.setupUi(self.MainWindow)
         # botao voltar
         self.ui_login.pushButton_voltar.clicked.connect(self.main)
@@ -79,6 +167,9 @@ class Telas:
 
     # tela_dashboard
     def tela_dashboard(self):
+        """
+        Starts the main window of the program's bank account.
+        """
         # requisição para buscar as informações da conta ativa
         request = f'nome_titular*{self._cpf_conta_ativa}'
         nome = self.send_request(request)
@@ -104,6 +195,9 @@ class Telas:
         self.ui_dashboard.pushButton_transferir.clicked.connect(self.tela_transferir)
 
     def print_historico(self):
+        """
+        Print an account history in screen.
+        """
         # carregar historico
         request = f'historico_titular*{self._cpf_conta_ativa}'
         request_return = self.send_request(request).split('\n')
@@ -121,6 +215,9 @@ class Telas:
                 self.ui_dashboard.tableWidget.setItem(index, 1, QtWidgets.QTableWidgetItem(log[1]))
 
     def atualizar_dados(self):
+        """
+        Updates the data on the user's screen.
+        """
         request = f'saldo_titular*{self._cpf_conta_ativa}'
         saldo = self.send_request(request)
         self.ui_dashboard.label_saldo.setText(f'Saldo R$ {round(float(saldo), 2)}')
@@ -129,18 +226,27 @@ class Telas:
 
     # tela_depositar
     def tela_depositar(self):
+        """
+        Launches the bank deposit screen.
+        """
         self.ui_depositar.setupUi(self.MainWindow)
         self.ui_depositar.pushButton_voltar.clicked.connect(self.tela_dashboard)
         self.ui_depositar.pushButton_depositar.clicked.connect(self.depositar)
 
     # tela_transferir
     def tela_transferir(self):
+        """
+        Starts the bank transfer screen.
+        """
         self.ui_tranferir.setupUi(self.MainWindow)
         self.ui_tranferir.pushButton_voltar.clicked.connect(self.tela_dashboard)
         self.ui_tranferir.pushButton_transferir.clicked.connect(self.transferir)
 
     # tela_sacar
     def tela_sacar(self):
+        """
+        Starts the bank withdrawal screen.
+        """
         self.ui_sacar.setupUi(self.MainWindow)
         self.ui_sacar.pushButton_voltar.clicked.connect(self.tela_dashboard)
         self.ui_sacar.pushButton_sacar.clicked.connect(self.sacar)
@@ -157,6 +263,9 @@ class Telas:
 
     # Criar conta
     def criar_conta(self):
+        """
+        Runs the bank account creation process.
+        """
         nome = self.ui_criar_conta.lineEdit_nome.text()
         cpf = self.ui_criar_conta.lineEdit_cpf.text()
         senha = self.ui_criar_conta.lineEdit_senha.text()
@@ -186,6 +295,9 @@ class Telas:
     # Fazer login
     # Fazer login receberá por parametro o email e a senha digitados na parte do cliente
     def fazer_login(self):
+        """
+        Runs the bank login process.
+        """
         cpf = self.ui_login.lineEdit_cpf.text()
         senha = self.ui_login.lineEdit_senha.text()
         request = f'login*{cpf}*{senha}'
@@ -202,6 +314,9 @@ class Telas:
     # Depositar
     # Depositar receberá do cliente o valor e o cpf para deposito
     def depositar(self):
+        """
+        Executes the bank deposit process.
+        """
         valor = self.ui_depositar.lineEdit_valor.text()
         request = f'depositar*{valor}*{self._cpf_conta_ativa}'
         return_request = self.send_request(request)
@@ -217,6 +332,9 @@ class Telas:
     # Sacar
     # Sacar receberá o valor e o cpf do titular
     def sacar(self):
+        """
+        runs the bank withdrawal process.
+        """
         valor = self.ui_sacar.lineEdit_valor.text()
         request = f'sacar*{valor}*{self._cpf_conta_ativa}'
         return_request = self.send_request(request)
@@ -231,6 +349,9 @@ class Telas:
     # Transferir
     # tranferir receberá o valor da transferencia, o remetente e o destinatario
     def transferir(self):
+        """
+        runs the bank transfer process.
+        """
         valor = self.ui_tranferir.lineEdit_valor.text()
         destinatario = self.ui_tranferir.lineEdit.text()
         nome_destinatario = self.send_request(f'nome_titular*{destinatario}')

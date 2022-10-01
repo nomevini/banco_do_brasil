@@ -1,5 +1,35 @@
 class Conta:
 
+    """
+    This class creates a bank account with all the account
+    data holder data, such as password, number, balance and history.
+
+    Attributes
+    ----------
+    __slots__ : list
+        Defines all attributes that can be created in the class.
+
+     idConta : int
+        Bank account identification.
+     titular : str
+        Name of the account holder.
+     senha : str
+        Account access password.
+     numero : str
+        Bank account number.
+     saldo: Float
+        Account balance.
+     historico : str
+        bank transaction history.
+
+    Methods
+    -------
+
+    formatar_historico_string()
+        formats in a string all the operations performed that are
+        stored in the history.
+    """
+
     __slots__ = ['_idConta', '_titular', '_senha', '_saldo', '_numero', '_historico']
 
     def __init__(self, idConta, titular, senha, numero, saldo=0, historico=None):

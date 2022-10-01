@@ -4,13 +4,28 @@ import threading
 
 
 class ClientThread(threading.Thread):
+    """
+        Instantiates a Thread so that the simultaneous execution of bank
+        applications is possible.
+
+        Attributes
+        ---------
+        clientSock : socket.socket
+            connection socket to send and receive requests.
+        clientAddress : str
+            Connection IP address
+
+        Methods
+        -------
+        run()
+            initialize the thread
+    """
     def __init__(self, clientSock, clientAddress):
         threading.Thread.__init__(self)
         self.clientSock = clientSock
         self.clientAddress = clientAddress
 
     def run(self):
-        # sacar*vinicius
         while True:
             arguments = self.clientSock.recv(1024).decode().split('*')
             # Buscando o método da requisição no banco
@@ -27,6 +42,25 @@ class ClientThread(threading.Thread):
 
 
 class Server:
+    """
+        Server class that waits for connections and when they are made,
+        sends them to the threads.
+
+        Attributes
+        ----------
+        host : str
+            localhost to make connections.
+        port : str
+            Access port for making connections
+        server : socket.socket
+            connection socket to send and receive requests.
+
+        Methods
+        -------
+        start(self)
+            Run the server so that it waits for connections.
+
+    """
     def __init__(self, host, port):
         self.host = host
         self.port = port
@@ -34,6 +68,11 @@ class Server:
         self.server.bind((self.host, self.port))
 
     def start(self):
+        """
+            Run the server so that it waits for connections.
+
+            When connected, a connection is created and sent to a thread.
+        """
         while True:
             self.server.listen(10)
             print("Aguardando conexão...")
@@ -50,5 +89,5 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server('localhost', 8001)
+    server = Server('localhost', 8000)
     server.start()

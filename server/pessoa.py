@@ -1,5 +1,21 @@
 class Pessoa:
 
+    """
+        Instantiates a person with the data idUsuario, nome, cpf e
+        data_nascimento
+
+        Attributes
+        ----------
+        IdUsuario : str
+            user id.
+        nome : str
+            Username.
+        cpf : str
+            User's CPF.
+        data_nascimento : str
+            User's date of birth.
+    """
+
     __slots__ = ['_idUsuario', '_nome', '_cpf', '_data_nascimento']
 
     def __init__(self, idUsuario, nome, cpf, data_nascimento):
