@@ -3,9 +3,13 @@ import hashlib
 
 def hash(senha):
     """
-    Return the password string into a Hash.
-
     senha : str
+
+    transform the password string ontro a Hash
+
+    returns
+    -------
+        Return the password Hash.
     """
     senha = senha.encode()
     hash = hashlib.md5(senha)

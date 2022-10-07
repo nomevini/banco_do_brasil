@@ -56,7 +56,6 @@ class Banco:
             Returns the user's balance
         nome_titular(*args)
             Returns the username of an account.
-
     """
 
     __slots__ = ['_db', '_senha', '_sinc_thread']
@@ -75,6 +74,9 @@ class Banco:
         args: list
             list of parameters necessary to search for the name of
             the account holder.
+        returns
+        -------
+            Return account holder name.
         """
         try:
             cpf = args[0]
@@ -92,6 +94,9 @@ class Banco:
         args: list
             list of parameters needed to search for the account
             holder's balance.
+        returns
+        -------
+            Returns the balance of the account holder.
         """
         cpf = args[0]
         conta = self.buscar_conta(cpf)
@@ -105,6 +110,9 @@ class Banco:
         args : list
               list of necessary parameters to search the account
               holder's history.
+        returns
+        -------
+            returns the history of the account holder.
         """
         string = ''
         cpf = args[0]
@@ -129,6 +137,10 @@ class Banco:
             Account holder's date of birth.
         senha : str
             Account access password.
+        returns
+        -------
+            Success: Returns a string with information about the created account.
+            Failure: Returns False.
         """
         # criar pessoa
         # query para verificar se existe aquela conta no banco
@@ -159,6 +171,10 @@ class Banco:
             Search a user's account in the database through the CPF.
         cpf : str
             Account holder's CPF.
+        Returns
+        -------
+            Success: Returns an account object, if found.
+            Failure: Returns false if the account is not found.
         """
         try:
             user = self._db.search_user(cpf)
@@ -188,6 +204,10 @@ class Banco:
 
         args : list
             list containing the CPF and password to log in to the account.
+        Returns
+        -------
+            Success: Returns the CPF.
+            Failure: Returns False.
         """
         cpf, senha = args
         conta = self.buscar_conta(cpf)
@@ -211,6 +231,10 @@ class Banco:
             Boolean value to idenfy whether the transaction refers to
             a withdrawal or a transfer, since the withdrawal function is
             used in the transfer process as well.
+        Returns
+        -------
+            Success: Returns True.
+            Failure: Returns False.
         """
         try:
             account = self.buscar_conta(cpf)
@@ -243,6 +267,10 @@ class Banco:
             Boolean value to identify whether the transaction refers
             to a deposit or a transfer, as the deposit function is used
             in the transfer process as well.
+        Returns
+        -------
+            Success: Returns True.
+            Failure: Returns False.
         """
         try:
             account = self.buscar_conta(cpf)
@@ -271,6 +299,10 @@ class Banco:
             CPF of the sender account holder.
         cpf_destino: str
             CPF of the target account holder.
+        Returns
+        -------
+            Success: Returns True.
+            Failure: Returns False.
         """
         try:
             conta_remetente = self.buscar_conta(cpf_remetente)

@@ -122,6 +122,9 @@ class Telas:
         ----------
         request : str
             Request to be sent.
+        Returns
+        -------
+            return request.
         """
         self.client_socket.send(request.encode())
         recv = self.client_socket.recv(1024)
